@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import "./header.css";
-import { Link } from "react-router-dom";
-import { useHistory } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -20,7 +18,8 @@ const theme = createTheme({
 });
 
 const Header = ({ loggedIn, username, handleLogout }) => {
-  const navigate = useHistory();
+  const location = useLocation();
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -29,8 +28,11 @@ const Header = ({ loggedIn, username, handleLogout }) => {
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
-    navigate.push('/history');
   };
+
+  const isHomePage = location.pathname === "/";
+  const isAboutUsPage = location.pathname === "/aboutus";
+
   return (
     <header>
       <div className="container flexSB">
@@ -39,40 +41,60 @@ const Header = ({ loggedIn, username, handleLogout }) => {
             <img src="./images/logo.png" alt="" />
           </div>
           <ul className="flexSB">
-            <li><a href="/">Home</a></li>
-            <li><a href="/aboutus" path="AboutUs">About Us</a></li>
-            <li><a href="/feedback" path="Feedback">Feedback</a></li>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/aboutus">About Us</Link>
+            </li>
+            <li>
+              <Link to="/feedback">Feedback</Link>
+            </li>
           </ul>
         </nav>
         <div className="account flexSB">
           <ThemeProvider theme={theme}>
-          {loggedIn ? (
-        <>
-          <IconButton onClick={handleOpenMenu}>
-            <AccountCircle color="primary" />
-          </IconButton>
-          <Typography variant="subtitle1" color="primary" pl={1}>
-            {username}
-          </Typography>
-          <Menu
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleCloseMenu}
-          >
-            <MenuItem onClick={handleCloseMenu}>History</MenuItem>
-            </Menu>
-            <Link to="/">
-            <Button variant="outlined" color="primary" pl={2} onClick={handleLogout} className="btn-logout">Log Out</Button>
-            </Link>
-          </>
+            {loggedIn ? (
+              <>
+                <IconButton onClick={handleOpenMenu}>
+                  <AccountCircle color="primary" />
+                </IconButton>
+                <Typography variant="subtitle1" color="primary" pl={1}>
+                  {username}
+                </Typography>
+                <Menu
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleCloseMenu}
+                >
+                  {(isHomePage || isAboutUsPage) && (
+                    <MenuItem onClick={handleCloseMenu}>
+                      <Link to="/history">History</Link>
+                    </MenuItem>
+                  )}
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </>
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="text" color="secondary" className="btn-login">Log In</Button>
+                  <Button
+                    variant="text"
+                    color="secondary"
+                    className="btn-login"
+                  >
+                    Log In
+                  </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button variant="outlined" color="primary" className="btn-signup">Sign Up</Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    className="btn-signup"
+                  >
+                    Sign Up
+                  </Button>
                 </Link>
               </>
             )}

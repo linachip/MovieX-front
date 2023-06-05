@@ -1,34 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
 
-const History = () => {
-    const [history, setHistory] = useState([]);
+const HistoryComponent = () => {
+  const [history, setHistory] = useState([]);
+  const userId = localStorage.getItem("userId");
 
-    useEffect(() => {
-        handleHistory();
-      }, []);
-
-    const handleHistory = async () => {
-        try {
-            const response = await axios.get("http://localhost:4040/history");
-            const userId = response.data;
-            setHistory(userId);
-        } catch(error) {
-            console.error(error);
-        }
-      };
+  useEffect(() => {
+    if (userId) {
+      axios
+        .get(`http://localhost:4040/history?userId=${userId}`)
+        .then((response) => {
+          const data = response.data;
+          if (data.history) {
+            setHistory(data.history);
+          }
+        })
+        .catch((error) => {
+          console.error("Error retrieving user history:", error);
+        });
+    }
+  }, [userId]);
 
   return (
     <div>
-    <h1>History</h1>
-    <ul>
-      {history.map((entry) => (
-        <li key={entry.id}>{entry.title}</li>
-      ))}
-    </ul>
-  </div>
-  )
-}
+      <h2> History</h2>
+      {history.length > 0 ? (
+        <ul>
+          {history.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No search history found.</p>
+      )}
+    </div>
+  );
+};
 
-export default History
+export default HistoryComponent;
