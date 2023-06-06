@@ -3,6 +3,7 @@ import axios from "axios";
 import MovieCard from "../../components/home/MovieCard";
 import { Snackbar, Button} from '@mui/material';
 import "./Recognition.css";
+import Pagination from '@mui/material/Pagination';
 
 
 const SearchButton = {
@@ -27,6 +28,19 @@ const Recognition = (props) => {
   const [results, setResults] = useState([]);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [error, setError] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const resultsPerPage = 5;
+
+  const totalPages = Math.ceil(results.length / resultsPerPage);
+
+  const currentResults = results.slice(
+    (currentPage - 1) * resultsPerPage,
+    currentPage * resultsPerPage
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const handlePhraseChange = (e) => {
     setPhrase(e.target.value);
@@ -169,30 +183,44 @@ const Recognition = (props) => {
 
       <div className="search-container">
       <ul>
-        {results.map((movie, index) => (
-          <li key={index}>
-            <h3>{movie.title}</h3>
-            {/* <p>{movie.popularity}</p> */}
-            <MovieCard
-              poster={movie.posterUrl}
-              title={movie.title}
-              overview={movie.description}
-            />
-            <p>Genres: {movie.genres.join(", ")}</p>
-          </li>
-        ))}
+        <div className="movie-grid">
+          {currentResults.map((movie, index) => (
+            <li key={index} className="movie-card">
+              <MovieCard
+                poster={movie.posterUrl}
+                className="movie-poster"
+                overview={movie.description}
+              />
+              <div className="movie-title">{movie.title}</div>
+              <p>Genres: {movie.genres.join(', ')}</p>
+            </li>
+          ))}
+        </div>
       </ul>
+      <div className="pagination">
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(_, page) => handlePageChange(page)}
+        color="secondary"
+        size="large"
+      />
+      </div>
   
       {recommendedMovies.length > 1 && (
         <div>
           <h2>Recommended Movies</h2>
           <ul>
+          <div className="reco-grid">
             {recommendedMovies[1].movies.map((movie, movieIndex) => (
-              <li key={movieIndex}>
-                <h3>{movie.title}</h3>
-                <MovieCard poster={movie.posterUrl} title={movie.title} overview={movie.description} />
+              <li key={movieIndex} className="reco-card">
+                <MovieCard 
+                  poster={movie.posterUrl}
+                  overview={movie.description} />
+                <div className="movie-title">{movie.title}</div>
               </li>
             ))}
+            </div>
           </ul>
         </div>
       )}

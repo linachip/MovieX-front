@@ -1,17 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import './MovieCard.css';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import {
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from '@mui/material';
 
 const MovieCard = ({title, poster, overview}) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
     <div className="movie-container">
-      <div > 
-          <img className="movie_img" src={ poster} alt="movie" />
-          <div className="movie-details">
-            <h2 className="movie-title">{title}</h2>
-            <p className="movie-overview">{overview}</p>
-          </div>
-      </div>
+    <Card onClick={handleOpen}> 
+        <CardMedia component="img" src={poster} alt={title} />
+        <CardContent>Description</CardContent>
+      </Card>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogContent>
+          <DialogContentText>{overview}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="error">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
     </>
   );
