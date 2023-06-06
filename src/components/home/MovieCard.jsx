@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import './MovieCard.css';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+import "./MovieCard.css";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 import {
   Dialog,
   DialogContent,
   DialogContentText,
   DialogActions,
   Button,
-} from '@mui/material';
+} from "@mui/material";
 
-const MovieCard = ({title, poster, overview}) => {
+const MovieCard = ({ title, poster, overview }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -24,22 +24,33 @@ const MovieCard = ({title, poster, overview}) => {
 
   return (
     <>
-    <div className="movie-container">
-    <Card onClick={handleOpen}> 
-        <CardMedia component="img" src={poster} alt={title} />
-        <CardContent>Description</CardContent>
-      </Card>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogContent>
-          <DialogContentText>{overview}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="error">
-            Close
+      <div className="movie-container">
+        <Card>
+          <CardMedia component="img" src={poster} alt={title} />
+          <Button
+            style={{
+              color: "#000",
+              padding: "10px",
+              width: "100%",
+              borderRadius: "0",
+            }}
+            onClick={handleOpen}
+          >
+            Description
           </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+        </Card>
+
+        <Dialog open={open} onClose={handleClose}>
+          <DialogContent>
+            <DialogContentText>{overview}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="error">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </>
   );
 };
