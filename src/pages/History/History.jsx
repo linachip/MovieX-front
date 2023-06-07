@@ -48,7 +48,7 @@ const History = () => {
           const movieData = responses.map((response) => {
             const result = response.data.results[0];
             return result ? result : null;
-          });
+          }).filter(r => !!r);
           setMovieData(movieData);
           setIsLoading(false);
         } catch (error) {

@@ -61,7 +61,7 @@ const LogIn = (props) => {
         localStorage.setItem("userId", userId);
 
         props.handleLogin(username, username); // Call handleLogin if login is successful
-        history.push("/");
+        history.push("/reco");
       } else {
         setError("Login failed! Incorrect password or login.");
       }

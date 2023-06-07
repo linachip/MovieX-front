@@ -18,8 +18,6 @@ const theme = createTheme({
 });
 
 const Header = ({ loggedIn, username, handleLogout }) => {
-  const location = useLocation();
-
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -29,9 +27,6 @@ const Header = ({ loggedIn, username, handleLogout }) => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-
-  const isHomePage = location.pathname === "/";
-  const isAboutUsPage = location.pathname === "/aboutus";
 
   return (
     <header>
@@ -58,10 +53,11 @@ const Header = ({ loggedIn, username, handleLogout }) => {
               <>
                 <IconButton onClick={handleOpenMenu} ref={anchorEl}>
                   <AccountCircle color="primary" />
+                  <Typography variant="subtitle1" color="primary" pl={1}>
+                    {username}
+                  </Typography>
                 </IconButton>
-                <Typography variant="subtitle1" color="primary" pl={1}>
-                  {username}
-                </Typography>
+
                 <Menu
                   anchorEl={anchorEl}
                   keepMounted

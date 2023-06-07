@@ -62,7 +62,7 @@ const SignUp = (props) => {
         localStorage.setItem("userId", userId);
 
         props.handleLogin(username, username); // Call handleLogin if signup is successful
-        history.push("/");
+        history.push("/reco");
       } else {
         console.log("Error registering user");
       }

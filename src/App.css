@@ -9,6 +9,7 @@ body {
   color: aliceblue;
   background-color: #141414;
   background-image: url("../public/images/cover3.png");
+  background-size: auto;
 }
 a {
   text-decoration: none;

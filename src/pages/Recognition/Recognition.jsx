@@ -12,7 +12,7 @@ const SearchButton = {
   fontSize: 16,
   fontWeight: 800,
   fontFamily: "Inter",
-  padding: "10px 60px",
+  padding: "17px 60px",
   border: "none",
   borderRadius: "5px",
   lineHeight: 1.5,
@@ -145,118 +145,6 @@ const Recognition = (props) => {
     return [];
   };
 
-  //   if (results.length > 0) {
-  //     const genreIds = results.flatMap((movie) => movie.genreIds);
-  //     const uniqueGenreIds = [...new Set(genreIds)];
-  //     setRecommendedMovies([]); // Clear recommended movies if there are no search results
-  //   }
-  // }, [results]);
-
-  // useEffect(() => {
-  //   const fetchRecommendedMovies = async () => {
-  //     try {
-  //       const API_KEY = "8b853ea22b2da094a00861a8d60da1e6";
-  //       const recommendedMovies = [];
-
-  //       for (let i = 0; i < Math.min(uniqueGenreIds.length, 2); i++) {
-  //         const genreId = uniqueGenreIds[i];
-  //         const response = await axios.get(
-  //           `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&with_genres=${genreId}&page=1&include_adult=false`
-  //         );
-
-  //         if (response.data.results.length > 0) {
-  //           const results = response.data.results.slice(0, 5);
-  //           const moviesWithDetails = await fetchMovieDetails(
-  //             results.map((movie) => movie.title)
-  //           );
-  //           recommendedMovies.push({ genreId, movies: moviesWithDetails });
-  //         }
-  //       }
-
-  //       setRecommendedMovies(recommendedMovies);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   if (results.length > 0) {
-  //     fetchRecommendedMovies();
-  //   }
-  // }, [results, fetchMovieDetails, uniqueGenreIds]);
-
-  // useEffect(() => {
-  //   const fetchRecommendedMovies = async () => {
-  //     try {
-  //       const API_KEY = "8b853ea22b2da094a00861a8d60da1e6";
-  //       const recommendedMovies = [];
-
-  //       const genreIds = results.flatMap((movie) => movie.genreIds);
-  //       const uniqueGenreIds = [...new Set(genreIds)];
-
-  //       for (let i = 0; i < Math.min(uniqueGenreIds.length, 2); i++) {
-  //         const genreId = uniqueGenreIds[i];
-  //         const response = await axios.get(
-  //           `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&with_genres=${genreId}&page=1&include_adult=false`
-  //         );
-
-  //         if (response.data.results.length > 0) {
-  //           const results = response.data.results.slice(0, 5);
-  //           const moviesWithDetails = await fetchMovieDetails(
-  //             results.map((movie) => movie.title)
-  //           );
-  //           recommendedMovies.push({ genreId, movies: moviesWithDetails });
-  //         }
-  //       }
-
-  //       setRecommendedMovies(recommendedMovies);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   if (results.length > 0) {
-  //     fetchRecommendedMovies();
-  //   } else {
-  //     setRecommendedMovies([]); // Clear recommended movies if there are no search results
-  //   }
-  // }, [results, fetchMovieDetails]);
-
-  // useEffect(() => {
-  //   const fetchRecommendedMovies = async () => {
-  //     try {
-  //       const API_KEY = "8b853ea22b2da094a00861a8d60da1e6";
-  //       const recommendedMovies = [];
-  //       const genreIds = results.flatMap((movie) => movie.genreIds);
-  //       const uniqueGenreIds = [...new Set(genreIds)];
-
-  //       for (let i = 0; i < Math.min(uniqueGenreIds.length, 2); i++) {
-  //         const genreId = uniqueGenreIds[i];
-  //         const response = await axios.get(
-  //           `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&with_genres=${genreId}&page=1&include_adult=false`
-  //         );
-
-  //         if (response.data.results.length > 0) {
-  //           const results = response.data.results.slice(0, 5);
-  //           const moviesWithDetails = await fetchMovieDetails(
-  //             results.map((movie) => movie.title)
-  //           );
-  //           recommendedMovies.push({ genreId, movies: moviesWithDetails });
-  //         }
-  //       }
-
-  //       setRecommendedMovies(recommendedMovies);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   if (results.length > 0) {
-  //     fetchRecommendedMovies();
-  //   } else {
-  //     setRecommendedMovies([]); // Clear recommended movies if there are no search results
-  //   }
-  // }, [results, fetchMovieDetails]);
-
   useEffect(() => {
     const fetchRecommendedMovies = async () => {
       try {
@@ -294,10 +182,16 @@ const Recognition = (props) => {
     }
   }, [results]);
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch(); // Trigger the search action
+    }
+  };
+
   return (
     <div>
       <div className="centered-top">
-        <input type="text" value={phrase} placeholder="Type your phrase" onChange={handlePhraseChange} />
+        <input type="text" value={phrase} placeholder="Type your phrase" onChange={handlePhraseChange} onKeyDown={handleKeyDown}/>
         <Button sx={SearchButton} onClick={handleSearch}>
           Search
         </Button>
