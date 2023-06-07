@@ -56,7 +56,7 @@ const Header = ({ loggedIn, username, handleLogout }) => {
           <ThemeProvider theme={theme}>
             {loggedIn ? (
               <>
-                <IconButton onClick={handleOpenMenu}>
+                <IconButton onClick={handleOpenMenu} ref={anchorEl}>
                   <AccountCircle color="primary" />
                 </IconButton>
                 <Typography variant="subtitle1" color="primary" pl={1}>
@@ -68,11 +68,9 @@ const Header = ({ loggedIn, username, handleLogout }) => {
                   open={Boolean(anchorEl)}
                   onClose={handleCloseMenu}
                 >
-                  {(isHomePage || isAboutUsPage) && (
-                    <MenuItem onClick={handleCloseMenu}>
-                      <Link to="/history">History</Link>
-                    </MenuItem>
-                  )}
+                  <MenuItem onClick={handleCloseMenu}>
+                    <Link to="/history">History</Link>
+                  </MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               </>

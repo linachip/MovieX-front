@@ -59,6 +59,8 @@ const SignUp = (props) => {
         const userId = data.userId; // Extract the userId from the response
         console.log(userId)
 
+        localStorage.setItem("userId", userId);
+
         props.handleLogin(username, username); // Call handleLogin if signup is successful
         history.push("/");
       } else {

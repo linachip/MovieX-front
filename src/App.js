@@ -38,19 +38,18 @@ function App() {
         <Route exact path="/" component={HomeCard}></Route>
         <Route exact path="/aboutus" component={AboutUs}></Route>
         <Route exact path="/feedback" component={Feedback}></Route>
-        <Route exact path="/history" component={History}></Route>
-        {/* <Route exact path='/reco' component={Recognition}></Route> */}
+        <Route exact path="/history" render={() => <History userId={userId} />}></Route>
         <Route
           exact
           path="/reco"
           render={() => <Recognition userId={userId} />}
         ></Route>
         <Route path="/login">
-          <LogIn handleLogin={handleLogin}/>
+          <LogIn handleLogin={handleLogin} />
           {/* <LogIn setToken={setToken} /> */}
         </Route>
         <Route path="/signup">
-          <SignUp handleLogin={handleLogin} />
+          <SignUp handleLogin={handleLogin}/>
         </Route>
       </Router>
     </div>

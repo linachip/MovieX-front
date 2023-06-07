@@ -1,35 +1,47 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./History.css";
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 
 const History = () => {
   const [history, setHistory] = useState([]);
   const [movieData, setMovieData] = useState([]);
+  const [userId, setUserId] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const userId = localStorage.getItem("userId");
   const apiKey = "8b853ea22b2da094a00861a8d60da1e6";
 
   useEffect(() => {
-    if (userId) {
-      axios
-        .get(`http://localhost:4040/history?userId=${userId}`)
-        .then((response) => {
+    const fetchUserData = async () => {
+      const userId = localStorage.getItem("userId");
+      setUserId(userId);
+      console.log(userId);
+
+      if (userId) {
+        try {
+          const response = await axios.get(
+            `http://localhost:4040/history?userId=${userId}`
+          );
           const data = response.data;
           if (data.history) {
             setHistory(data.history);
           }
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error("Error retrieving user history:", error);
-        });
-    }
-  }, [userId]);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
-    if (history.length > 0) {
-      const fetchMovieData = async () => {
+    const fetchMovieData = async () => {
+      if (history.length > 0) {
         const requests = history.map((item) =>
-          axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${item}`)
+          axios.get(
+            `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${item}`
+          )
         );
         try {
           const responses = await Promise.all(requests);
@@ -38,37 +50,53 @@ const History = () => {
             return result ? result : null;
           });
           setMovieData(movieData);
+          setIsLoading(false);
         } catch (error) {
           console.error("Error retrieving movie data:", error);
+          setIsLoading(false);
         }
-      };
+      } else {
+        setMovieData([]);
+        setIsLoading(false);
+      }
+    };
 
-      fetchMovieData();
-    }
+    fetchMovieData();
   }, [history, apiKey]);
 
   return (
     <div className="history-grid">
       <h2>History</h2>
-      {movieData.length > 0 ? (
+      {movieData.length > 0 && (
         <div className="movie-grid">
           {movieData.map((movie, index) => (
             <div key={index} className="movie-card">
               {movie && movie.poster_path && (
                 <>
-                  <img src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} className="movie-poster" alt="Movie Poster" />
+                  <img
+                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                    className="movie-poster"
+                    alt="Movie Poster"
+                  />
                   <span>{movie.title}</span>
                 </>
               )}
             </div>
           ))}
         </div>
-      ) : (
-        <p>No search history found</p>
+      )}
+      {movieData.length === 0 && (
+        <div className="history-noresult">
+          <SentimentVeryDissatisfiedIcon style={{ fontSize: "70px" }} />
+          <p>
+            
+              
+              "No search history found"
+          </p>
+        </div>
       )}
     </div>
   );
 };
 
 export default History;
-

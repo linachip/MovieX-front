@@ -48,3 +48,17 @@
     font-weight: bold;
   }
   
+.history-noresult {
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top:110px;
+  font-size: 40px;
+  opacity: 0.9;
+}
+
+.history-noresult p {
+    padding-top: 20px;
+}
