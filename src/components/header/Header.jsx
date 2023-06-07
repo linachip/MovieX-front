@@ -33,7 +33,9 @@ const Header = ({ loggedIn, username, handleLogout }) => {
       <div className="container flexSB">
         <nav className="flexSB">
           <div className="logo">
-            <img src="./images/logo.png" alt="" />
+            <Link to="/">
+              <img src="./images/logo.png" alt="" />
+            </Link>
           </div>
           <ul className="flexSB">
             <li>

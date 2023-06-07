@@ -12,7 +12,7 @@ const SearchButton = {
   fontSize: 16,
   fontWeight: 800,
   fontFamily: "Inter",
-  padding: "17px 60px",
+  padding: "16px 50px",
   border: "none",
   borderRadius: "5px",
   lineHeight: 1.5,

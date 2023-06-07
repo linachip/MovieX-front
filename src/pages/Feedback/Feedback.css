@@ -1,25 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&family=Poppins:wght@100;400;700&display=swap');
+
+.feedback{
+  display: flex;
+
+}
+
+
 .feedback-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
     color: #fff;
   }
   
 .welcome-container {
-    position: relative;
-    margin-left: 120px;
-    padding: 10px;
+    padding: 60px 10px 40px 10px;
   }
 
-.welcome-container p {
-    padding-top: 10px;
-}
-
 .feedback-container h1 {
-    margin-top: 150px;
+    /* margin-top: 150px; */
     font-size: 90px;
     text-transform: uppercase;
     font-weight: 800;
@@ -31,10 +29,8 @@
     -webkit-font-smoothing: antialiased;
   }
 
-.feedback-form {
-    position: relative;
-    margin-top: 250px;
-    margin-left: 60px;
+  .feedback-container p {
+    font-size: 18px;
   }
 
 textarea {
@@ -48,7 +44,16 @@ textarea {
   }
 
 .feedbacks {
-    position: relative;
-    margin-top: 30px;
-    margin-left: 60px;
+  font-size: 20px;
+    margin-top: 80px;
+    /* margin-bottom: auto; */
+    margin-left: 150px;
+}
+
+.feedbacks ul {
+  padding: 0 17px;
+}
+
+.feedbacks li{
+  padding: 7px 0;
 }
