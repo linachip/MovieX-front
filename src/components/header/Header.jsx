@@ -62,7 +62,7 @@ const Header = ({ loggedIn, username, handleLogout }) => {
 
                 <Menu
                   anchorEl={anchorEl}
-                  keepMounted
+                  keepMounted={false}
                   open={Boolean(anchorEl)}
                   onClose={handleCloseMenu}
                 >

@@ -15,12 +15,12 @@ import History from "./pages/History/History";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
-  const [userId, setUserId] = useState();
+  const [token, setToken] = useState();
 
-  const handleLogin = (userId, username) => {
+  const handleLogin = (token, username) => {
     setUsername(username);
     setLoggedIn(true);
-    setUserId(userId);
+    setToken(token);
   };
 
   const handleLogout = () => {
@@ -37,19 +37,25 @@ function App() {
         />
         <Route exact path="/" component={HomeCard}></Route>
         <Route exact path="/aboutus" component={AboutUs}></Route>
-        <Route exact path="/feedback" component={Feedback}></Route>
-        <Route exact path="/history" render={() => <History userId={userId} />}></Route>
+
+
+        <Route
+          exact
+          path="/history"
+          render={() => <History token={token} />}
+        ></Route>
         <Route
           exact
           path="/reco"
-          render={() => <Recognition userId={userId} />}
+          render={() => <Recognition token={token} />}
         ></Route>
+
         <Route path="/login">
           <LogIn handleLogin={handleLogin} />
           {/* <LogIn setToken={setToken} /> */}
         </Route>
         <Route path="/signup">
-          <SignUp handleLogin={handleLogin}/>
+          <SignUp handleLogin={handleLogin} />
         </Route>
       </Router>
     </div>

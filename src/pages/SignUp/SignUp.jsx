@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import "./SignUp.css";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
+import axios from "axios";
 
 const SignupButton = styled(Button)({
   boxShadow: "none",
@@ -40,28 +40,18 @@ const SignUp = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const json = JSON.stringify({
-      username: username,
-      password: password,
-    });
-
     try {
-      const response = await fetch("http://localhost:4040/newuser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: json,
+      const response = await axios.post("http://localhost:4040/newuser", {
+        username: username,
+        password: password,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const userId = data.userId; // Extract the userId from the response
-        console.log(userId)
+      const token = response.headers.authorization;
+        sessionStorage.setItem("accessToken", token);
 
-        localStorage.setItem("userId", userId);
-
-        props.handleLogin(username, username); // Call handleLogin if signup is successful
+      if (response.status === 200) {
+        
+        props.handleLogin(token, username);
         history.push("/reco");
       } else {
         console.log("Error registering user");

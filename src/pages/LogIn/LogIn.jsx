@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import "./LogIn.css";
 import { styled } from "@mui/material/styles";
 import { Snackbar, Button } from "@mui/material";
+import axios from "axios";
 
 const LoginButton = styled(Button)({
   boxShadow: "none",
@@ -27,7 +28,7 @@ const LogIn = (props) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -41,37 +42,28 @@ const LogIn = (props) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4040/login", {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-        }),
+      const response = await axios.post("http://localhost:4040/login", {
+        username: username,
+        password: password,
       });
 
-      if (response.status === 200) {
-        const data = await response.json();
-        const { userId } = data;
-        // Store the user ID in local storage
-        localStorage.setItem("userId", userId);
+      //const token = response.data.token;
+      const token = response.headers.authorization;
+      sessionStorage.setItem('accessToken', token)
+      console.log(sessionStorage)
 
-        props.handleLogin(username, username); // Call handleLogin if login is successful
-        history.push("/reco");
-      } else {
-        setError("Login failed! Incorrect password or login.");
-      }
+      // Store the token in local storage
+      // localStorage.setItem("token", token);
+
+      props.handleLogin(token, username); // Call handleLogin with the token if login is successful
+      history.push("/reco");
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleCloseSnackbar = () => {
-    setError('');
+    setError("");
   };
 
   return (
@@ -96,13 +88,19 @@ const LogIn = (props) => {
             required
           />
           <Snackbar
-          open={Boolean(error)}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-          message={error}
-          action={
-            <Button color="secondary" size="small" onClick={handleCloseSnackbar}>Close</Button>
-          }
+            open={Boolean(error)}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            message={error}
+            action={
+              <Button
+                color="secondary"
+                size="small"
+                onClick={handleCloseSnackbar}
+              >
+                Close
+              </Button>
+            }
           />
         </div>
 

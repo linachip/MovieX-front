@@ -6,34 +6,76 @@ import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDiss
 const History = () => {
   const [history, setHistory] = useState([]);
   const [movieData, setMovieData] = useState([]);
-  const [userId, setUserId] = useState("");
+  const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const apiKey = "8b853ea22b2da094a00861a8d60da1e6";
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userId = localStorage.getItem("userId");
-      setUserId(userId);
-      console.log(userId);
-
-      if (userId) {
-        try {
-          const response = await axios.get(
-            `http://localhost:4040/history?userId=${userId}`
-          );
-          const data = response.data;
-          if (data.history) {
-            setHistory(data.history);
+      try {
+        const response = await axios.get(
+          `http://localhost:4040/history?token=${token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            },
           }
-        } catch (error) {
-          console.error("Error retrieving user history:", error);
+        );
+        // const token = response.headers.authorization;
+        // sessionStorage.setItem("accessToken", token);
+        const data = response.data;
+        if (data.history) {
+          setHistory(data.history);
         }
+      } catch (error) {
+        console.error("Error retrieving user history:", error);
       }
+      // }
     };
 
     fetchUserData();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchMovieData = async () => {
+  //     if (history.length > 0) {
+  //       const requests = history.map((item) =>
+  //         axios.get(
+  //           `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${item}`
+  //         )
+  //       );
+  //       try {
+  //         const responses = await Promise.all(requests);
+  //         const movieData = responses
+  //           .map((response) => {
+  //             const result = response.data.results[0];
+  //             return result ? result : null;
+  //           })
+  //           .filter((r) => !!r);
+  //         setMovieData(movieData);
+  //         setIsLoading(false);
+  //       } catch (error) {
+  //         console.error("Error retrieving movie data:", error);
+  //         setIsLoading(false);
+  //       }
+  //     } else {
+  //       setMovieData([]);
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchMovieData();
+  // }, [history, apiKey]);
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     const fetchMovieData = async () => {
@@ -45,10 +87,16 @@ const History = () => {
         );
         try {
           const responses = await Promise.all(requests);
-          const movieData = responses.map((response) => {
-            const result = response.data.results[0];
-            return result ? result : null;
-          }).filter(r => !!r);
+          const movieData = responses
+            .map((response) => {
+              const result = response.data.results[0];
+              if (result && Object.keys(result).length > 0) {
+                return result;
+              }
+              return null;
+            }).filter((item) => item !== null && item !== undefined);
+            
+            
           setMovieData(movieData);
           setIsLoading(false);
         } catch (error) {
@@ -60,9 +108,10 @@ const History = () => {
         setIsLoading(false);
       }
     };
-
+  
     fetchMovieData();
   }, [history, apiKey]);
+  
 
   return (
     <div className="history-grid">
@@ -88,11 +137,7 @@ const History = () => {
       {movieData.length === 0 && (
         <div className="history-noresult">
           <SentimentVeryDissatisfiedIcon style={{ fontSize: "70px" }} />
-          <p>
-            
-              
-              "No search history found"
-          </p>
+          <p>No search history found</p>
         </div>
       )}
     </div>
